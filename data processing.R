@@ -61,8 +61,9 @@ hr50 = subset(hr, ID %in% id50)
 cov50 = subset(cov, SEQN %in% id50)
 names(cov)[1] = "ID"
 names(cov50)[1] = "ID"
-save(cov, file = "~/Dropbox/Junrui Di/tensor analysis/GSVD/cov.rda")
-save(cov50, file = "~/Dropbox/Junrui Di/tensor analysis/GSVD/cov50.rda")
-save(hr, file = "~/Dropbox/Junrui Di/tensor analysis/GSVD/hr.rda")
-save(hr50, file = "~/Dropbox/Junrui Di/tensor analysis/GSVD/hr50.rda")
+setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/Data/")
+save(cov, file = "cov.rda")
+save(cov50, file = "cov50.rda")
+save(hr, file = "hr.rda")
+save(hr50, file = "hr50.rda")
 
