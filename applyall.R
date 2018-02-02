@@ -65,7 +65,9 @@ hoevd = function(x,rank){
   tnsr = as.tensor(x)
   unfold = k_unfold(tnsr,m = 1)@data
   u = svd(unfold, nu = rank)$u
-  return(u)
+  ulist = list(u,u,u)
+  z = ttl(tnsr, lapply(ulist, t), ms = 1:tnsr@num_modes)@data
+  return(list( u = u, z = z))
 }
 
 

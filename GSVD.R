@@ -1,6 +1,6 @@
 #Generalized SVD
 rm(list = ls())
-setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
+setwd("D:/Dropbox/Junrui Di/tensor analysis/GSVD/")
 source("GSVDScripts/applyall.R")
 load("Data/hr50.rda")
 Y = scale(hr50[,-1], center = T, scale = F)
@@ -13,8 +13,20 @@ S2 = diag(SVD2$d)
 
 #2. 3rd 
 moment3 = MGT3(Y)
-V3 = hoevd(moment3,rank = 32)
+V3 = hoevd(moment3,rank = 32)$u
+core_v3 = hoevd(moment3,rank = 32)$z
+unfold_core_v3_1 = k_unfold(as.tensor(core_v3),m=1)@data
+unfold_core_v3_2 = k_unfold(as.tensor(core_v3),m=2)@data
+unfold_core_v3_3 = k_unfold(as.tensor(core_v3),m=3)@data
+
+core_v3_1 = core_v3[1,,]
+core_v3_2 = core_v3[2,,]
+core_v3_3 = core_v3[3,,]
+
+
 U3 = Gram3_hosvd(Y)
+
+
 
 S3 = t(U3) %*% Y %*% V3
 
@@ -24,7 +36,7 @@ vtil3 = svd(S3)$v
 u3u3t = U3 %*% util3
 v3v3t = V3 %*% vtil3
 
-#2. 3rd 
+#3. 4th
 moment4 = MGT4(Y)
 V4= hoevd(moment4,rank = 32)
 U4 = Gram4_hosvd(Y)
@@ -32,6 +44,16 @@ S4 = t(U4) %*% Y %*% V4
 
 util4 = svd(S4)$u
 vtil4 = svd(S4)$v
+
+
+u4u4t = U4 %*% util4
+v4v4t = V4 %*% vtil4
+
+
+
+
+
+
 
 pdf(file = "result/0117/corplot_U.pdf", width = 28, height = 28)
 par(mar = c(4,5,9,6))
