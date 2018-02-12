@@ -1,8 +1,9 @@
 rm(list = ls())
-setwd("D:/Dropbox/Junrui Di/tensor analysis/GSVD/")
+setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
 source("GSVDScripts/applyall.R")
 load("Data/hr50.rda")
 Y = scale(hr50[,-1], center = T, scale = F)
+Y[, 32] = Y[,31]*5
 moment3 = MGT3(Y)
 rm(list = setdiff(ls(),c("moment3","MGT3")))
 
