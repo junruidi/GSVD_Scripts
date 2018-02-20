@@ -27,7 +27,7 @@ MGT4 <- function (x) {
 }
 
 #2. cumulant tensors
-third_cumulant_p<- function (x) {
+third_cumulant<- function (x) {
   n <- nrow (x)
   m <- ncol (x)
   mm <- 1 : m
@@ -40,36 +40,25 @@ third_cumulant_p<- function (x) {
 }
 
 
-four_cumulants_direct <- function (x) {
+four_cumulants <- function (x) {
   n <- nrow (x)
   m <- ncol (x)
   mm <- 1 : m
   nn <- 1 : n
-  r1 <- colSums (x) / n
   r2 <- crossprod (x) / n
-  r3 <- array (0, c (m, m, m))
   r4 <- array (0, c (m, m, m, m))
   for (i in nn) {
-    r3 <- r3 + outer (outer (x [i, ], x [i, ]), x [i,])
     r4 <- r4 + outer (outer (x [i, ], x [i, ]), outer (x [i, ], x [i, ]))
   }
-  r3<-r3 / n
   r4<-r4 / n
-  c2<-r2 - outer (r1, r1)
-  c3<-r3
+  
+  c2<-r2 
   c4<-r4
   for (i in mm) for (j in mm) for (k in mm) for (l in mm)
   {
     s4 <- r4 [i, j, k, l]
-    s31 <- r3 [i, j, k] * r1 [l] + r3 [i, j, l] * r1 [k] + r3 [i, k, l] * r1 [j] + r3 [j, k, l] * r1 [i]
     s22 <- r2 [i, j] * r2 [k, l] + r2 [i, k] * r2 [j, l] + r2 [j, k] * r2 [i, l]
-    s211 <- r2 [i, j] * r1 [k] * r1 [l] + r2 [i, k] *
-      r1 [j] * r1 [l] + r2 [i, l] * r1 [k] * r1 [j] +
-      r2 [j, k] * r1 [i] * r1 [l] + r2 [j, l] * r1 [i] * 
-      r1 [k] + r2 [k, l] * r1 [i] * r1 [j]
-    s1111 <- r1 [i] * r1 [j] * r1 [k] * r1 [l]
-    
-    c4 [i, j, k, l] <- s4 - s31 - s22 + 2 * s211 - 6 * s1111
+    c4 [i, j, k, l] <- s4 -  s22 
   }
   return (c4)
 }
@@ -79,7 +68,8 @@ hoevd = function(x,rank){
   tnsr = as.tensor(x)
   unfold = k_unfold(tnsr,m = 1)@data
   u = svd(unfold, nu = rank)$u
-  ulist = list(u,u,u)
+  ulist = list(u)
+  ulist = rep(ulist,tnsr@num_modes)
   z = ttl(tnsr, lapply(ulist, t), ms = 1:tnsr@num_modes)@data
   return(list( u = u, z = z))
 }

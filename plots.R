@@ -93,13 +93,13 @@ cum4Y = four_cumulants_direct(Y)
 col4 <- colorRampPalette(c("#7F0000", "red", "#FF7F00", "yellow", "#7FFF7F",
                            "cyan", "#007FFF", "blue", "#00007F"))
 pdf(file = "Write Up/plots/c4_1_2.pdf", width = 8,height = 5 )
-par(mar = c(4,5,9,6))
+par(mar = c(4,5,15,6))
 par(oma = c(1,0,1,0))
 for(i in 1:32){
   for(j in 1:32){
   m1 = cum4Y[i,j,,]
   corrplot(m1,method = "color",is.corr = F,cl.pos = "r",col = col4(200), cl.length = 21,cl.cex = 0.6,
-           tl.cex = 0.8, tl.pos = "n",cl.align.text = "l",cl.ratio = 0.1, number.digits = 1)
+           tl.cex = 0.8, tl.pos = "n",cl.align.text = "l",cl.ratio = 0.1, number.digits = 1,title = paste(i,j,",,",sep = " "))
 }}
 dev.off()
 
