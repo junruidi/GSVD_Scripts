@@ -5,8 +5,8 @@ source("GSVDScripts/applyall.R")
 
 #1. 2nd order
 pc.hr = prcomp(x = hr50[,-1], scale. = F, center = T)
-PC2 = pc.hr$rotation[,1:16] # up to 90%
-SC2 = pc.hr$x[,1:16]
+PC2 = pc.hr$rotation[,1:25] # up to 90%
+SC2 = pc.hr$x[,1:25]
 
 #2. 3rd order
 Y = scale(hr50[,-1],center = T,scale = F)
@@ -24,7 +24,7 @@ SC3 = Y %*% PC3
 
 #or looking at TCA
 CUM3_2sc = third_cumulant(SC2)
-hosvd3_2sc = hoevd(CUM3_2sc,16)
+hosvd3_2sc = hoevd(CUM3_2sc,25)
 
 PC3_2sc = hosvd3_2sc$u
 core3_2sc = hosvd3_2sc$z

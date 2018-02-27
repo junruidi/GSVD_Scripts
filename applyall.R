@@ -89,8 +89,9 @@ Gram3_hosvd = function(y){
   middle = s2 %*% k_unfold(as.tensor(vvv),m=1)@data %*% (s2 %x% s2)
   middle_u = svd(middle)$u
   
+  
   u3 = u2 %*% middle_u
-  return(u3)
+  return(list (u = u3, middle = middle))
 }
 
 Gram4_hosvd = function(y){
@@ -107,5 +108,5 @@ Gram4_hosvd = function(y){
   middle_u = svd(middle)$u
   
   u4 = u2 %*% middle_u
-  return(u4)
+  return(list (u = u4, middle = middle))
 }
