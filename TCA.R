@@ -65,3 +65,67 @@ PC4_p = PC3_p %*% PC4_3sc
 SC4_p = Y %*% PC4_p
 
 
+# plot
+addmat = matrix(0,ncol = 4,nrow = 32)
+PC3 = cbind(PC3,addmat[,1])
+PC4 = cbind(PC4,addmat)
+for(i in 1:ncol(PC2)){
+  if(i == 1){
+    PC2[,i] = -PC2[,i]
+  }
+  sign2 = sign(PC2[1,i])
+  sign23 = sign(PC3[1,i])
+  sign234 = sign(PC4[1,i])
+  if(sign2 != sign23){
+    PC3[,i] = -PC3[,i]
+  }
+  if(sign2 != sign234){
+    PC4[,i] = -PC4[,i]
+  }
+}
+library(qdap)
+library(timeDate)
+library(lubridate)
+TIME = char2end(as.character(timeSequence(from = hm("7:00"), to = hm("22:59"), by = "hour")),char = " ",noc=1)
+TIME = beg2char(TIME,":",2)
+
+pdf("Write Up/TCA_PCs.pdf",width = 10,height = 10)
+par(mfrow = c(3,1))
+for(i in 1:16){
+  plot(PC2[,i],main = paste0("PC - ",i),type = "l",xaxt = "n",ylab = "loading")
+  axis(1, at = c(seq(1,32,2)),labels = TIME)
+  abline(h = 0,lty = 3)
+  plot(PC3[,i],main = paste0("Cum3 - ",i),type = "l",xaxt = "n", ylab = "loading")
+  axis(1, at = c(seq(1,32,2)),labels = TIME)
+  abline(h = 0,lty = 3)
+  plot(PC4[,i],main = paste0("Cum4 - ",i),type = "l",xaxt = "n", ylab = "loading")
+  axis(1, at = c(seq(1,32,2)),labels = TIME)
+  abline(h = 0,lty = 3)
+}
+dev.off()
+
+# Create survey object
+score_TCA = as.data.frame(cbind(SC2,SC3,SC4))
+names(score_TCA) = c(paste0("PC2_",c(1:16)),paste0("PC3_",c(1:15)),paste0("PC4_",c(1:12)))
+
+pdf(file = "Write Up/cor_TCAscore.pdf", width = 28, height = 28)
+par(mar = c(4,5,9,6))
+par(oma = c(1,0,1,0))
+corrplot::corrplot(cor(score_TCA),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
+dev.off()
+
+
+
+
+load("Data/cov50.rda")
+
+survival_TCA = cbind(cov50,score_TCA)
+
+library(survey)
+svydata_TCA = svydesign(id=~SDMVPSU,
+                       strat=~SDMVSTRA,
+                       weight=~wt4yr_norm,
+                       nest=TRUE,
+                       data=survival_TCA)
+
+save(svydata_TCA, file = "Data/survival_TCA.dta")
