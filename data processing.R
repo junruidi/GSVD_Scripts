@@ -51,12 +51,14 @@ cov = subset(cov, select = c(SEQN,age, Male, BMXBMI,diabetes, CHF, stroke, cance
                                 FormerDrinker, ModerateDrinker, HeavyDrinker, MissingAlcohol,yr,permth_exm,mortstat,SDMVPSU,SDMVSTRA))
 cov = na.omit(cov)
 cov$include = 1
+cov$mort_yr  <- cov$permth_exm/12
+cov$yr5_mort <- as.integer(ifelse(cov$mort_yr <= 5 & cov$mortstat == 1, 1,0))
 
 
 keep = intersect(cov$SEQN,hr$ID)
 cov = subset(cov, SEQN %in% keep)
 hr = subset(hr, ID %in% keep)
-id50 = cov$SEQN[which(cov$age >= 50)]
+id50 = cov$SEQN[which(cov$age > 50)]
 hr50 = subset(hr, ID %in% id50)
 cov50 = subset(cov, SEQN %in% id50)
 names(cov)[1] = "ID"
