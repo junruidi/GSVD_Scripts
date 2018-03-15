@@ -3,8 +3,7 @@ setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
 load("Data/cov50.rda")
 
 library(nhanesaccel)
-cov50$survyr = cov50$permth_exm/12
-cov50$yr5_mort = as.integer(ifelse(cov50$survyr <= 5 & cov50$mortstat == 1, 1,0))
+cov50$yr5_mort = as.integer(ifelse(cov50$mort_yr <= 5 & cov50$mortstat == 1, 1,0))
 cov50$permth_exm = NULL
 
 include.column = which(names(cov50)=="include")

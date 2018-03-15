@@ -1,5 +1,3 @@
-dat$yr5_mort <- as.integer(ifelse(dat$survyr <= 5 & dat$mortstat == 1, 1,0))
-
 # variabels in the baseline model
 base_vars = c("age", "Male", "BMXBMI", 
              "diabetes", "CHF", "stroke", "cancer", "CHD", 
