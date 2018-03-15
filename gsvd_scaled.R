@@ -41,7 +41,7 @@
 # more = t(w) %*% uy %*% diag(sy) %*% t(vy) %*% (w %x% w)
 
 rm(list = ls())
-setwd("D:/Dropbox/Junrui Di/tensor analysis/GSVD/")
+setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
 load("Data/hr50.rda")
 source("GSVDScripts/applyall.R")
 library(MASS)
@@ -100,12 +100,27 @@ names(sc) = paste0("SC",rep(c(2,3,4),each = 32),"_",rep(c(1:32),3))
 u_score = as.data.frame(cbind(u,hosvd3_u$u,hosvd4_u$u))
 names(u_score) = paste0("US",rep(c(2,3,4),each = 32),"_",rep(c(1:32),3))
 
-pdf(file = "Write Up/cor_gsvd_scaled_center.pdf", width = 28, height = 28)
+
+score_all = cbind(sc, u_score)
+
+pdf(file = "Write Up/cor_gsvd_scaled_center.pdf", width = 56, height = 56)
+par(mar = c(4,5,9,6))
+par(oma = c(1,0,1,0))
+corrplot::corrplot(cor(score_all),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
+dev.off()
+
+pdf(file = "Write Up/cor_gsvd_scaled_center_pcscore.pdf", width = 28, height = 28)
 par(mar = c(4,5,9,6))
 par(oma = c(1,0,1,0))
 corrplot::corrplot(cor(sc),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
+dev.off()
+
+pdf(file = "Write Up/cor_gsvd_scaled_center_mdsscore.pdf", width = 28, height = 28)
+par(mar = c(4,5,9,6))
+par(oma = c(1,0,1,0))
 corrplot::corrplot(cor(u_score),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
 dev.off()
+
 
 
 library(qdap)
@@ -145,11 +160,14 @@ dev.off()
 
 load("Data/cov50.rda")
 
-survival_gsvd_center_scale = cbind(cov50,sc)
+survival_gsvd_center_scale = cbind(cov50,score_all)
 
 
 save(survival_gsvd_center_scale, file = "Data/survival_gsvdc_centerscale.rda")
-#########################################3
+
+
+
+#########################################
 #prediction model
 rm(list = ls())
 setwd("/Users/junruidi/Dropbox/Junrui Di/tensor analysis/GSVD/")
