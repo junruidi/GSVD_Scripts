@@ -41,7 +41,7 @@
 # more = t(w) %*% uy %*% diag(sy) %*% t(vy) %*% (w %x% w)
 
 rm(list = ls())
-setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
+setwd("D:/Dropbox/Junrui Di/tensor analysis/GSVD/")
 load("Data/hr50.rda")
 source("GSVDScripts/applyall.R")
 library(MASS)
@@ -89,6 +89,10 @@ pct_ev4_v = cumsum(svd_4_v)/sum(svd_4_v) # 8 50%+, 11 60%+, 15 70%+, 19 80%+, 25
 
 sc4 = Yp %*% phi4 
 hosvd4_u = Gram4_hosvd(Yp)
+
+
+phi3 = ginv(t(w)) %*% phi3
+phi4 = ginv(t(w)) %*% phi4
 
 
 phi = as.data.frame(cbind(phi2, phi3, phi4))
@@ -143,7 +147,7 @@ TIME = beg2char(TIME,":",2)
 
 
 
-pdf("Write Up/gsvd_phi_scaled_center.pdf",width = 10,height = 10)
+pdf("Write Up/gsvd_phi_scaled_center_transfer.pdf",width = 10,height = 10)
 par(mfrow = c(3,1))
 for(i in 1:32){
   plot(phi2[,i],main = paste0("phi2 - ",i),type = "l",xaxt = "n",ylab = "RSV")

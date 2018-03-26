@@ -1,5 +1,5 @@
 rm(list = ls())
-setwd("~/Dropbox/Junrui Di/tensor analysis/GSVD/")
+setwd("D:/Dropbox/Junrui Di/tensor analysis/GSVD/")
 load("Data/hr50.rda")
 source("GSVDScripts/applyall.R")
 
@@ -14,6 +14,8 @@ d2 = SVD2$d
 pct_ev2 = cumsum(d2)/sum(d2) # 25
 
 
+sc2 = prcomp(Y,center = F,scale. = F)$x
+
 #2. 3rd 
 moment3 = MGT3(Y)
 hosvd3_v = hoevd(moment3,rank = 32)
@@ -22,6 +24,8 @@ hosvd3_u = Gram3_hosvd(Y)
 V3 = hosvd3_v$u
 U3 = hosvd3_u$u
 S3 = t(U3) %*% Y %*% V3
+
+sc3 = Y %*% V3
 
 core3_v = hosvd3_v$z
 unfold_3_1_v = k_unfold(as.tensor(core3_v),1)@data
@@ -42,6 +46,8 @@ V4 = hosvd4_v$u
 U4 = hosvd4_u$u
 S4 = t(U4) %*% Y %*% V4
 
+sc4 = Y %*% V4
+
 core4_v = hosvd4_v$z
 unfold_4_1_v = k_unfold(as.tensor(core4_v),1)@data
 svd_4_v = svd(unfold_4_1_v)$d
@@ -58,12 +64,29 @@ names(V) = paste0("V",rep(c(2,3,4),each = 32),"_",rep(c(1:32),3))
 U = as.data.frame(cbind(U2,U3,U4))
 names(U) = paste0("U",rep(c(2,3,4),each = 32),"_",rep(c(1:32),3))
 
+SC = as.data.frame(cbind(sc2,sc3,sc4))
+names(SC) = paste0("SC",rep(c(2,3,4),each = 32),"_",rep(c(1:32),3))
+
+score_all = cbind(SC, U)
+
 
 # plots 
-pdf(file = "Write Up/cor_gsvd_center.pdf", width = 28, height = 28)
+pdf(file = "Write Up/cor_gsvd_center_U.pdf", width = 28, height = 28)
 par(mar = c(4,5,9,6))
 par(oma = c(1,0,1,0))
 corrplot::corrplot(cor(U),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
+dev.off()
+
+pdf(file = "Write Up/cor_gsvd_center_SC.pdf", width = 28, height = 28)
+par(mar = c(4,5,9,6))
+par(oma = c(1,0,1,0))
+corrplot::corrplot(cor(SC),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
+dev.off()
+
+pdf(file = "Write Up/cor_gsvd_center.pdf", width = 28, height = 28)
+par(mar = c(4,5,9,6))
+par(oma = c(1,0,1,0))
+corrplot::corrplot(cor(score_all),cl.pos = "b",cl.cex = 2,tl.cex = 1.6,cl.align.text = "r",na.label = "-")
 dev.off()
 
 pdf(file = "Write Up/S_center.pdf", width = 15, height = 15)
