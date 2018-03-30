@@ -110,7 +110,7 @@ for(i in 1:2){
 }
 par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
 plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-legend("bottom", c(expression(Phi^(2)),expression(Phi^(3)),expression(Phi^(4))), 
+legend("bottom", c(expression(Phi^(2)),expression(tilde(Phi)^(3)),expression(tilde(Phi)^(4))), 
        xpd = TRUE, col = c("black","red","blue"), cex = 2,
        horiz = TRUE, inset = c(0,0), bty = "n", lwd = 2, lty = 1)
 dev.off()
